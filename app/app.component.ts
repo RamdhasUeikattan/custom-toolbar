@@ -4,7 +4,7 @@ import { gridData1 } from './data';
 
 @Component({
     selector: 'my-app',
-    template: `<ej-grid #grid [dataSource]='data' height='350px' [editSettings]='editSetting' (actionComplete)='actionCompleteHandler($event)' (actionBegin)='actionBeginHandler($event)' 
+    template: `<ej-grid #grid [dataSource]='data' [allowFiltering]='true' height='350px' [editSettings]='editSetting' (actionComplete)='actionCompleteHandler($event)' (actionBegin)='actionBeginHandler($event)' 
     (dataBound)='dataBoundHandler()'>
                 <ng-template #toolbarTemplate let-data>
                  <ej-toolbar #toolbar (clicked)='toolbarClick($event)'>
@@ -14,6 +14,11 @@ import { gridData1 } from './data';
                      <e-item text='Delete' prefixIcon='e-delete' id='delete'></e-item>
                      <e-item text='Update' prefixIcon='e-update' id='update'></e-item>
                      <e-item text='Cancel' prefixIcon='e-cancel' id='cancel'></e-item>
+                     <e-item >
+                     <ng-template #template>
+                        <span>DataCount - {{dataCount}}</span>
+                     </ng-template>
+                     </e-item>
                   </e-items>
                 </ej-toolbar> 
                 </ng-template>
@@ -40,6 +45,8 @@ export class AppComponent implements OnInit {
     
     public toolbarItems;
 
+    public dataCount;
+
     ngOnInit(): void {
         this.data = gridData1;
         this.validationRules= {required:true};
@@ -47,6 +54,7 @@ export class AppComponent implements OnInit {
     }
     
     toolbarClick(args: ClickEventArgs){
+      debugger;
       switch(args.item.id){
         case 'add':
           this.grid.editModule.addRecord();
@@ -72,6 +80,9 @@ export class AppComponent implements OnInit {
       // For initial rendering toolbar items show hidden
       this.toolbar.enableItems(this.toolbarItems.slice(3,5), false);
       this.toolbar.enableItems(this.toolbarItems.slice(0,3), true);
+
+      // update data count
+      this.dataCount = this.grid.currentViewData.length;
     }
     actionCompleteHandler(args){
       if(args.requestType === 'cancel' || args.requestType==='save') {
