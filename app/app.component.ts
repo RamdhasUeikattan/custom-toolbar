@@ -54,7 +54,6 @@ export class AppComponent implements OnInit {
     }
     
     toolbarClick(args: ClickEventArgs){
-      debugger;
       switch(args.item.id){
         case 'add':
           this.grid.editModule.addRecord();
